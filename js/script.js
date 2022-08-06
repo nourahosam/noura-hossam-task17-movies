@@ -19,44 +19,78 @@ const mediator = new eventsMediator();
 
 class MoviesAPI {
     movieList = {};
+    page = 1;
     constructor() {
         this.movieList = {};
     }
 
     init() {
         this.cacheElements();
+        this.bindEvents();
         this.render();
     }
 
     cacheElements() {
         this.$card = $('<div></div>').addClass('col card');
-        this.$img = $('.img img');
-        this.$content = $('.content');
         this.$movies = $('.movies');
         this.$emptyMovies = $('.movies').clone();
         this.$container = $('.container');
     }
     bindEvents() {
-
+        this.prevPage();
+        this.nextPage();
+        this.firstPage();
+        this.lastPage();
     }
+    prevPage(){
+        $('#prevPage').on('click', (e) => {
+            console.log(this.page);
+            if(this.page > 1){
+                this.page--;
+            }
+            this.render();
+        });
+    }
+    nextPage(){
+        $('#nextPage').on('click', (e) => {
+            console.log(this.page);
+            if(this.page < 20){
+                this.page++;
+            }
 
+            this.render();
+        });
+    }
+    lastPage(){
+        $('#lastPage').on('click', (e) => {
+            console.log(this.page);
+            this.page = 20;
+            this.render();
+        });
+    }
+    firstPage(){
+        $('#firstPage').on('click', (e) => {
+            console.log(this.page);
+            this.page = 1;
+            this.render();
+        });
+    }
     async loadMovies() {
-        var newList = {};
-        var getSession = await axios.get('https://api.themoviedb.org/3/movie/popular?api_key=82e76194c0eb671daf705bb300744835&page=5')
-                                    .catch(error => { console.log(error); alert("couldnt load message"); })
-                                    .then(response => {
-                                        this.movieList = response.data;
-                                        //console.log(response);
-                                        mediator.emit('moviesAPI.success', response.data)
-                                    });
-        //this.movieList = getSession.data;
+        this.movieList = {};
+        await axios.get('https://api.themoviedb.org/3/movie/popular?api_key=82e76194c0eb671daf705bb300744835&page='+this.page)
+                    .catch(error => { console.log(error); alert("couldnt load message"); })
+                    .then(response => {
+                        //this.$movies.empty();
+                        this.movieList = response.data;
+                        mediator.emit('moviesAPI.success', response.data)
+                    });
 
 
     }
     async render() {
-        
+        //console.log(this.page);
         await this.loadMovies();
-        console.log(this.movieList);
+        //console.log(this.movieList);
         var counter = -1;
         this.movieList.results.forEach((el) => {
             counter++;
@@ -107,9 +141,6 @@ var Stats = class{
                 top = el;
             }
         })
-        console.log('topppppppppppp');
-        console.log(top);
-        console.log('topppppppppppp');
         this.$statPage.html(`Page: ${data.page}`);
         this.$statMovies.html(`Number of Movies: ${data.results.length}`);
         this.$statTop.html(`Top Rated Movie: ${top.title}`);

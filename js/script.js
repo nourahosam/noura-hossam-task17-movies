@@ -35,6 +35,7 @@ class MoviesAPI {
         this.$movies = $('.movies');
         this.$emptyMovies = $('.movies').clone();
         this.$container = $('.container');
+        this.$movieCont = $('.movie-cont');
     }
     bindEvents() {
         this.prevPage();
@@ -88,6 +89,7 @@ class MoviesAPI {
 
     }
     async render() {
+        this.$movieCont.empty();
         //console.log(this.page);
         await this.loadMovies();
         //console.log(this.movieList);
@@ -105,7 +107,7 @@ class MoviesAPI {
             if (counter % 4 == 0) {
                 this.$movies = this.$emptyMovies.clone();
                 this.$newCard.appendTo(this.$movies);
-                this.$movies.appendTo(this.$container);
+                this.$movies.appendTo(this.$movieCont);
             }
             else {
                 this.$newCard.appendTo(this.$movies);
@@ -124,7 +126,7 @@ var Stats = class{
         this.$statPage = $('.stat-page');
         this.$statMovies = $('.stat-movies');
         this.$statTop = $('.stat-top');
-        this.$statRating = $('stat-rating');
+        this.$statRating = $('.stat-rating');
     }
     showData(){
 

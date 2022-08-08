@@ -1,3 +1,47 @@
 img{
     width: 200px;
 }
+
+.cont-modal{
+    width: 100%;
+    height: 100%;
+    background-color: rgb(128, 128, 128, 0.5);
+    position: fixed;
+    z-index: 2 ;
+
+}
+
+.modal-content{
+    width: 600px;
+    height: 350px;
+    margin: 0 auto;
+    margin-top: 100px;
+    background-color: white;
+    /* display: fixed; */
+    /* position: relative; */
+}
+.container{
+    z-index: -1;
+}
+
+.modal-close{
+    margin-top: 10px;
+    width: 98%;
+    text-align: right;
+    position: absolute;
+    z-index: 3
+}
+
+.modal-body {
+    display: flex;
+    flex-direction: row;
+    /* position: absolute; */
+}
+
+.modal-img{
+    margin-right: 30px;
+}
+.btn-close{
+    width: 50px;
+    height: 50px;
+}

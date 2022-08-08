@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,11 +10,33 @@
     <link rel="stylesheet" href="./css/style.css">
     <title>Document</title>
 </head>
+
 <body>
+    <div class="cont-modal d-none">
+        <div class="modal-content">
+            <div class="modal-close">
+                <div class="btn-close close-click float-end"></div>
+            </div>
+            <div class="modal-body">
+                <div class="modal-img">
+                    <img src="./img/notfound.png">
+                </div>
+                <div class="modal-text">
+                    
+                    <h2>Title</h2>
+                    <h4>Rating</h4>
+                    <p>aiofejskl aejgkfm kajfkflm kadjfdkml</p>
+                </div>
+            </div>
+            
+        </div>
+    </div>
     <div class="container">
         <div class="row">
-            <div class="col"><h2>Movies</h2></div>
-        </div> 
+            <div class="col">
+                <h2>Movies</h2>
+            </div>
+        </div>
         <div class="row stats">
             <span class="stat-page"></span>
             <span class="stat-movies"></span>
@@ -23,7 +46,7 @@
     </div>
     <div class="container movie-cont">
         <div class="row movies">
-            
+
         </div>
     </div>
     <div class="buttons">
@@ -32,10 +55,11 @@
         <button id="lastPage">Last Page</button>
         <button id="firstPage">First Page</button>
     </div>
-
+    
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mustache@4.2.0/mustache.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="./js/script.js"></script>
 </body>
+
 </html>

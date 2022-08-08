@@ -45,7 +45,7 @@ class MoviesAPI {
     }
     prevPage(){
         $('#prevPage').on('click', (e) => {
-            console.log(this.page);
+            //console.log(this.page);
             if(this.page > 1){
                 this.page--;
             }
@@ -54,7 +54,7 @@ class MoviesAPI {
     }
     nextPage(){
         $('#nextPage').on('click', (e) => {
-            console.log(this.page);
+            //console.log(this.page);
             if(this.page < 20){
                 this.page++;
             }
@@ -64,14 +64,14 @@ class MoviesAPI {
     }
     lastPage(){
         $('#lastPage').on('click', (e) => {
-            console.log(this.page);
+            //console.log(this.page);
             this.page = 20;
             this.render();
         });
     }
     firstPage(){
         $('#firstPage').on('click', (e) => {
-            console.log(this.page);
+            //console.log(this.page);
             this.page = 1;
             this.render();
         });
@@ -95,6 +95,7 @@ class MoviesAPI {
         //console.log(this.movieList);
         var counter = -1;
         this.movieList.results.forEach((el) => {
+            
             counter++;
             this.$newCard = this.$card.clone();
             var htmlData = {
@@ -112,6 +113,10 @@ class MoviesAPI {
             else {
                 this.$newCard.appendTo(this.$movies);
             }
+            
+            this.$newCard.on('click', (e)=>{
+                mediator.emit('modal.click', el);
+            });
         })
     }
 }
@@ -150,9 +155,43 @@ var Stats = class{
     }
 }
 
+var Modal = class {
+    init(){
+        this.bindEvents();
+        this.cacheElements();
+    }
+    cacheElements(){
+        this.$modalImg = $('.modal-img');
+        this.$modalTitle = $('.modal-text h2');
+        this.$modalRating = $('.modal-text h4');
+        this.$modalText = $('.modal-text p');
+        this.$mainModal = $('.cont-modal');
+        this.$closeBtn = $('.btn-close');
+    }
+    bindEvents(){
+        mediator.on('modal.click', this.render.bind(this));
+        
+    }
+    render(data){
+        this.$mainModal.removeClass('d-none');
+        console.log(data);
+        var posterPath = 'https://image.tmdb.org/t/p/original' + data.poster_path;
+
+        this.$modalImg.html(`<img src='${posterPath}'>`);
+        this.$modalTitle.html(`${data.original_title}`);
+        this.$modalRating.html(`IMDB Rating: ${data.vote_average}/10 (${data.vote_count} votes.)`);
+        this.$modalText.html(`${data.overview}`);
+        this.$closeBtn.on('click', (e)=>{
+            this.$mainModal.addClass('d-none')
+            console.log("arkldmdsl;");
+        })
+    }
+}
 
 
+const modal = new Modal();
 const movie = new MoviesAPI();
 const stat = new Stats();
 stat.init();
 movie.init();
+modal.init();

@@ -1,3 +1,4 @@
+
 var eventsMediator = class {
     events = {};
     on(eventName, callbackFn) {
@@ -15,6 +16,36 @@ var eventsMediator = class {
     }
 }
 
+var loadComponent = class {
+    init(){
+        this.bindEvents();
+        this.cacheElements();
+    }
+    bindEvents(){
+        mediator.on('load.comp', (data)=>{
+            console.log('mediator on', data);
+            if(data){
+                this.loadShow();
+            }
+            else{
+                this.loadHide();
+            }
+        });
+    }
+    cacheElements(){
+        this.$load = $('.load');
+    }
+    loadShow(){
+        console.log("load show");
+        this.$load.removeClass('d-none');
+    }
+    loadHide(){
+        console.log("load hide");
+        this.$load.addClass('d-none');
+    }
+}
+
+
 const mediator = new eventsMediator();
 
 class MoviesAPI {
@@ -28,6 +59,7 @@ class MoviesAPI {
         this.cacheElements();
         this.bindEvents();
         this.render();
+
     }
 
     cacheElements() {
@@ -38,14 +70,22 @@ class MoviesAPI {
         this.$movieCont = $('.movie-cont');
     }
     bindEvents() {
+        this.loadComp();
+        mediator.emit('load.comp', true);
         this.prevPage();
         this.nextPage();
         this.firstPage();
         this.lastPage();
+        
+    }
+    loadComp(){
+        const load = new loadComponent();
+        load.init();
     }
     prevPage(){
+        
         $('#prevPage').on('click', (e) => {
-            //console.log(this.page);
+            mediator.emit('load.comp', true);
             if(this.page > 1){
                 this.page--;
             }
@@ -53,8 +93,9 @@ class MoviesAPI {
         });
     }
     nextPage(){
+        
         $('#nextPage').on('click', (e) => {
-            //console.log(this.page);
+            mediator.emit('load.comp', true);
             if(this.page < 20){
                 this.page++;
             }
@@ -64,14 +105,14 @@ class MoviesAPI {
     }
     lastPage(){
         $('#lastPage').on('click', (e) => {
-            //console.log(this.page);
+            mediator.emit('load.comp', true);
             this.page = 20;
             this.render();
         });
     }
     firstPage(){
         $('#firstPage').on('click', (e) => {
-            //console.log(this.page);
+            mediator.emit('load.comp', true);
             this.page = 1;
             this.render();
         });
@@ -81,7 +122,7 @@ class MoviesAPI {
         await axios.get('https://api.themoviedb.org/3/movie/popular?api_key=82e76194c0eb671daf705bb300744835&page='+this.page)
                     .catch(error => { console.log(error); alert("couldnt load message"); })
                     .then(response => {
-                        //this.$movies.empty();
+                        mediator.emit('load.comp', false);
                         this.movieList = response.data;
                         mediator.emit('moviesAPI.success', response.data)
                     });
@@ -118,6 +159,7 @@ class MoviesAPI {
                 mediator.emit('modal.click', el);
             });
         })
+        
     }
 }
 
@@ -187,6 +229,7 @@ var Modal = class {
         })
     }
 }
+
 
 
 const modal = new Modal();
